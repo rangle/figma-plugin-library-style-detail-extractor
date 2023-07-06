@@ -1,7 +1,7 @@
 {
-  "name": "Library-StyleId-Extractor",
+  "name": "library-style-detail-extractor",
   "version": "1.0.0",
-  "description": "Figma Plugin to extract all Style Name or Style Ids",
+  "description": "Figma Plugin to extract all Style Names or Style Ids",
   "main": "code.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",

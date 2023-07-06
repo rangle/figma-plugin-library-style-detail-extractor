@@ -1,11 +1,12 @@
 <style>
   body {
-    background-color: var(--figma-color-bg);
-    color: var(--figma-color-text);
+    background-color: var(--figma-color-bg, #2c2c2c);
+    color: var(--figma-color-text, #fff, #fff);
     font-family: Inter, sans-serif;
     font-size: 11px;
     line-height: 16px;
     letter-spacing: calc(0.005px + var(--text-tracking-pos, 0) * 11px);
+    padding: 1em 2em;
   }
 
   button {
@@ -16,29 +17,39 @@
     padding: 0 11px;
     background-color: transparent;
     box-sizing: border-box;
-    color: var(--figma-color-text);
-    border: 1px solid var(--figma-color-border);
+    color: var(--figma-color-text, #fff);
+    border: 1px solid var(--figma-color-border, #444444);
     box-sizing: border-box;
     border-radius: 6px;
   }
 
+  .button-holder {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5em;
+  }
+
+  #output-wrapper {
+    display: none;
+  }
+
   #output {
-    display: hidden;
-    border: 1px solid var(--figma-color-border);
     padding: 11px;
     background-color: transparent;
     box-sizing: border-box;
-    color: var(--figma-color-text);
-    border: 1px solid var(--figma-color-border);
+    color: var(--figma-color-text, #fff);
+    border: 1px solid var(--figma-color-border, #444444);
     box-sizing: border-box;
     border-radius: 6px;
   }
 </style>
 
-<button id="extractNames">Extract Names</button>
-<button id="extractIds">Extract Ids</button>
-<button id="cancel">Cancel</button>
-<code><pre id="output"></pre></code>
+<div class="button-holder">
+  <button id="extractNames">Extract Names</button>
+  <button id="extractIds">Extract Ids</button>
+  <button id="cancel">Cancel</button>
+</div>
+<code id="output-wrapper"><pre id="output"></pre></code>
 <script>
   let mode = "ids";
   document.getElementById("extractNames").onclick = () => {
@@ -62,7 +73,7 @@
       let text = `Library:\n${libName}\n\nStyles:\n`;
       text += mode === "ids" ? styleIds.join("\n") : styleNames.join("\n");
       output.innerHTML = text;
-      output.style.display = "block";
+      document.getElementById("output-wrapper").style.display = "block";
     }
   };
 </script>
