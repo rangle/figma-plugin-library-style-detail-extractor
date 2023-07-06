@@ -1,5 +1,5 @@
 {
-  "name": "library-style-detail-extractor",
+  "name": "figma-plugin-library-style-detail-extractor",
   "version": "1.0.0",
   "description": "Figma Plugin to extract all Style Names or Style Ids",
   "main": "code.js",
@@ -7,8 +7,12 @@
     "build": "tsc -p tsconfig.json",
     "watch": "npm run build -- --watch"
   },
-  "author": "",
-  "license": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rangle/figma-plugin-library-style-detail-extractor"
+  },
+  "author": "michael.mrowetz@rangle.io",
+  "license": "MIT",
   "devDependencies": {
     "@figma/plugin-typings": "*",
     "typescript": "*"
