@@ -1,7 +1,7 @@
 {
   "name": "Library-StyleId-Extractor",
   "version": "1.0.0",
-  "description": "Your Figma Plugin",
+  "description": "Figma Plugin to extract all Style Name or Style Ids",
   "main": "code.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",

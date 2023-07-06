@@ -1,15 +1,68 @@
-<button id="extract">Extract</button>
+<style>
+  body {
+    background-color: var(--figma-color-bg);
+    color: var(--figma-color-text);
+    font-family: Inter, sans-serif;
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: calc(0.005px + var(--text-tracking-pos, 0) * 11px);
+  }
+
+  button {
+    text-align: center;
+    flex-shrink: 0;
+    height: 32px;
+    line-height: 30px;
+    padding: 0 11px;
+    background-color: transparent;
+    box-sizing: border-box;
+    color: var(--figma-color-text);
+    border: 1px solid var(--figma-color-border);
+    box-sizing: border-box;
+    border-radius: 6px;
+  }
+
+  #output {
+    display: hidden;
+    border: 1px solid var(--figma-color-border);
+    padding: 11px;
+    background-color: transparent;
+    box-sizing: border-box;
+    color: var(--figma-color-text);
+    border: 1px solid var(--figma-color-border);
+    box-sizing: border-box;
+    border-radius: 6px;
+  }
+</style>
+
+<button id="extractNames">Extract Names</button>
+<button id="extractIds">Extract Ids</button>
 <button id="cancel">Cancel</button>
-<code id="output"></code>
+<code><pre id="output"></pre></code>
 <script>
-  document.getElementById("create").onclick = () => {
-    parent.postMessage(
-      { pluginMessage: { type: "create-rectangles", count } },
-      "*"
-    );
+  let mode = "ids";
+  document.getElementById("extractNames").onclick = () => {
+    mode = "names";
+    parent.postMessage({ pluginMessage: { type: "extract-styles" } }, "*");
+  };
+
+  document.getElementById("extractIds").onclick = () => {
+    mode = "ids";
+    parent.postMessage({ pluginMessage: { type: "extract-styles" } }, "*");
   };
 
   document.getElementById("cancel").onclick = () => {
     parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
+  };
+
+  onmessage = ({ data: { pluginMessage } }) => {
+    if (pluginMessage.type === "result") {
+      const output = document.getElementById("output");
+      const { libName, styleIds, styleNames } = pluginMessage;
+      let text = `Library:\n${libName}\n\nStyles:\n`;
+      text += mode === "ids" ? styleIds.join("\n") : styleNames.join("\n");
+      output.innerHTML = text;
+      output.style.display = "block";
+    }
   };
 </script>
