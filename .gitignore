@@ -7,3 +7,5 @@ out/
 dist/
 code.js
 .vscode
+.DS_Store
+Plugin/

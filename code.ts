@@ -1,6 +1,7 @@
 figma.showUI(__html__, { width: 350, height: 400 });
 
 figma.ui.onmessage = (msg) => {
+  // ref https://forum.figma.com/t/getlocalpaintstyles-but-for-libraries/1280
   if (msg.type === "extract-styles") {
     const styles = [
       ...figma.getLocalGridStyles(),

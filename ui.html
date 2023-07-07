@@ -31,16 +31,24 @@
 
   #output-wrapper {
     display: none;
-  }
-
-  #output {
-    padding: 11px;
+    margin: 1em 0;
     background-color: transparent;
     box-sizing: border-box;
     color: var(--figma-color-text, #fff);
     border: 1px solid var(--figma-color-border, #444444);
     box-sizing: border-box;
     border-radius: 6px;
+    padding: 11px;
+    overflow-x: scroll;
+  }
+
+  #output-wrapper .button-holder {
+    margin: 0 0 1em;
+    justify-content: flex-end;
+  }
+
+  #output {
+    margin: 0;
   }
 </style>
 
@@ -49,9 +57,38 @@
   <button id="extractIds">Extract Ids</button>
   <button id="cancel">Cancel</button>
 </div>
-<code id="output-wrapper"><pre id="output"></pre></code>
+<div id="output-wrapper">
+  <div class="button-holder"><button id="copyResult">Copy Ids</button></div>
+  <code>
+    <pre id="output"></pre>
+  </code>
+</div>
 <script>
+  const copyToClipboard = (value) => {
+    try {
+      if (window.copy) {
+        window.copy(value);
+      } else {
+        const area = document.createElement("textarea");
+        document.body.appendChild(area);
+        area.value = value;
+        area.focus();
+        area.select();
+        const result = document.execCommand("copy");
+        document.body.removeChild(area);
+        if (!result) {
+          throw new Error();
+        }
+      }
+    } catch (e) {
+      console.error(`Unable to copy the value: ${value}`);
+      return false;
+    }
+    return true;
+  };
+
   let mode = "ids";
+  let result = "";
   document.getElementById("extractNames").onclick = () => {
     mode = "names";
     parent.postMessage({ pluginMessage: { type: "extract-styles" } }, "*");
@@ -66,12 +103,27 @@
     parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
   };
 
+  document.getElementById("copyResult").onclick = () => {
+    const isCopied = copyToClipboard(result);
+    const label = document
+      .getElementById("copyResult")
+      .innerText.replace(/ [✅❌]/, "");
+    if (isCopied) {
+      document.getElementById("copyResult").innerText = `${label} ✅`;
+    } else {
+      document.getElementById("copyResult").innerText = `${label} ❌`;
+    }
+  };
+
   onmessage = ({ data: { pluginMessage } }) => {
     if (pluginMessage.type === "result") {
       const output = document.getElementById("output");
       const { libName, styleIds, styleNames } = pluginMessage;
       let text = `Library:\n${libName}\n\nStyles:\n`;
-      text += mode === "ids" ? styleIds.join("\n") : styleNames.join("\n");
+      result = mode === "ids" ? styleIds.join("\n") : styleNames.join("\n");
+      document.getElementById("copyResult").innerText =
+        mode === "ids" ? "Copy IDs to Clipboard" : "Copy Names to Clipboard";
+      text += result;
       output.innerHTML = text;
       document.getElementById("output-wrapper").style.display = "block";
     }
